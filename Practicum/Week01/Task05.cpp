@@ -11,7 +11,7 @@ namespace EmployeesNS
 
 	struct Employee
 	{
-		char name[100];
+		char name[100 + 1];
 		double salary;
 		int rating;
 		Positions position;

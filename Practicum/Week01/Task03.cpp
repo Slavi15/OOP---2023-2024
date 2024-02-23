@@ -12,7 +12,7 @@ namespace GroupsNS
 	struct Student
 	{
 		unsigned int fN;
-		char name[100];
+		char name[100 + 1];
 		double grade;
 		Major major;
 	};
