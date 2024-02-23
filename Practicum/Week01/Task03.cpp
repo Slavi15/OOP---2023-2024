@@ -7,6 +7,7 @@ using std::endl;
 namespace GroupsNS
 {
 	enum class Major { SI, IS, KN, PM, M, INF };
+	enum class Criteria { sortByGrade, sortByFN };
 
 	struct Student
 	{
@@ -22,6 +23,25 @@ namespace GroupsNS
 		double averageGrade;
 		size_t studentsCount;
 	};
+
+	const char* getMajor(Major major)
+	{
+		switch (major)
+		{
+		case Major::SI:
+			return "Software Engineering";
+		case Major::KN:
+			return "Computer Science";
+		case Major::IS:
+			return "Information Systems";
+		case Major::INF:
+			return "Informatics";
+		case Major::PM:
+			return "Applied Mathematics";
+		case Major::M:
+			return "Mathematics";
+		}
+	}
 
 	void inputStudent(Student& student)
 	{
@@ -54,6 +74,14 @@ namespace GroupsNS
 		}
 	}
 
+	void printStudent(const Student& student)
+	{
+		cout << "Name: " << student.name << endl;
+		cout << "Faculty number: " << student.fN << endl;
+		cout << "Major: " << getMajor(student.major) << endl;
+		cout << "Grade: " << student.grade << endl;
+	}
+
 	void createGroup(Group& group, size_t N)
 	{
 		for (size_t i = 0; i < N; i++)
@@ -77,36 +105,41 @@ namespace GroupsNS
 		return counter;
 	}
 
-	void insertionSort(Student* students, size_t len)
+	void insertionSort(Group& group, bool(*isBigger)(const Student& s1, const Student& s2))
 	{
-		if (!students)
-			return;
-
-		for (size_t i = 1; i < len; i++)
+		for (size_t i = 1; i < group.studentsCount; i++)
 		{
-			Student currentStudent = students[i];
+			Student currentStudent = group.students[i];
 			int currentIndex = i - 1;
 
-			while (currentIndex >= 0 && students[currentIndex].grade > currentStudent.grade)
+			while (currentIndex >= 0 && isBigger(group.students[currentIndex], currentStudent))
 			{
-				students[currentIndex + 1] = students[currentIndex];
+				group.students[currentIndex + 1] = group.students[currentIndex];
 				currentIndex--;
 			}
 
-			students[currentIndex + 1] = currentStudent;
+			group.students[currentIndex + 1] = currentStudent;
 		}
 	}
 
-	void printArray(const Student* students, size_t len)
+	void sortByCriteria(Group& group, Criteria criteria)
 	{
-		if (!students)
-			return;
-
-		for (size_t i = 0; i < len; i++)
-			cout << "Student: " << students[i].fN << ' ' << students[i].name << ' ' << students[i].grade << endl;
+		switch (criteria)
+		{
+		case Criteria::sortByGrade:
+			return insertionSort(group, [](const Student& s1, const Student& s2) { return s1.grade > s2.grade; });
+		case Criteria::sortByFN:
+			return insertionSort(group, [](const Student& s1, const Student& s2) { return s1.fN > s2.fN; });
+		}
 	}
 
-	void sortStipendStudents(const Group& group, double minimumGrade)
+	void printArray(const Group& group)
+	{
+		for (size_t i = 0; i < group.studentsCount; i++)
+			printStudent(group.students[i]);
+	}
+
+	void sortStipendStudents(Group& group, double minimumGrade)
 	{
 		unsigned int stipendStudentsCount = getStipendStudents(group, minimumGrade);
 
@@ -116,17 +149,16 @@ namespace GroupsNS
 			if (group.students[i].grade >= minimumGrade)
 				stipendStudents[newIdx++] = group.students[i];
 
-		// Insertion Sort <=> elements are near to each other
-		insertionSort(stipendStudents, stipendStudentsCount);
+		sortByCriteria(group, Criteria::sortByGrade);
 
-		printArray(stipendStudents, stipendStudentsCount);
+		printArray(group);
 
 		delete[] stipendStudents;
 	}
 
-	bool isFound(const Group& group, unsigned int fN)
+	bool isFound(Group& group, unsigned int fN)
 	{
-		insertionSort(group.students, group.studentsCount);
+		sortByCriteria(group, Criteria::sortByFN);
 
 		unsigned int left = 0, right = group.studentsCount - 1;
 
@@ -148,18 +180,18 @@ namespace GroupsNS
 
 int main()
 {
-	unsigned int N;
+	size_t N;
 	cin >> N;
 
 	GroupsNS::Student* students = new GroupsNS::Student[N];
 	GroupsNS::Group group = { students, 0, 0 };
 
-	GroupsNS::createGroup(group, N);
+	/*GroupsNS::createGroup(group, N);
 	GroupsNS::sortStipendStudents(group, 4);
 
 	cout << GroupsNS::isFound(group, 6) << endl;
 
-	cout << "Average grade: " << group.averageGrade << endl;
+	cout << "Average grade: " << group.averageGrade << endl;*/
 
 	delete[] students;
 

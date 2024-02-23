@@ -7,7 +7,7 @@ using std::endl;
 namespace EmployeesNS
 {
 	enum class Positions { SE, SSE, EM, LSE };
-	const char* positions[] = { "Software Engineer", "Senior Software Engineer", "Engineer Manager", "Lead Software Engineer" };
+	enum class Criteria { sortByName, sortBySalary, sortByRating };
 
 	struct Employee
 	{
@@ -23,6 +23,23 @@ namespace EmployeesNS
 		double averagePay;
 		size_t employeesCount;
 	};
+
+	const char* getPosition(Positions position)
+	{
+		switch (position)
+		{
+		case Positions::SE:
+			return "Software Engineer";
+		case Positions::SSE:
+			return "Senior Software Engineer";
+		case Positions::EM:
+			return "Engineer Manager";
+		case Positions::LSE:
+			return "Lead Software Engineer";
+		default:
+			return "No position";
+		}
+	}
 
 	void readEmployee(Employee& employee)
 	{
@@ -75,21 +92,31 @@ namespace EmployeesNS
 		return *first - *second;
 	}
 
-	void selectionSort(Employee* employees, size_t len)
+	void selectionSort(Firm& firm, bool(*compare)(const Employee& e1, const Employee& e2))
 	{
-		if (!employees)
-			return;
-
-		for (size_t i = 0; i < len - 1; i++)
+		for (size_t i = 0; i < firm.employeesCount - 1; i++)
 		{
 			size_t minIndex = i;
 
-			for (size_t j = i + 1; j < len; j++)
-				if (myStrCmp(employees[j].name, employees[minIndex].name) < 0)
+			for (size_t j = i + 1; j < firm.employeesCount; j++)
+				if (compare(firm.employees[j], firm.employees[minIndex]))
 					minIndex = j;
 
 			if (minIndex != i)
-				std::swap(employees[minIndex], employees[i]);
+				std::swap(firm.employees[minIndex], firm.employees[i]);
+		}
+	}
+
+	void sortByCriteria(Firm& firm, Criteria criteria)
+	{
+		switch (criteria)
+		{
+		case Criteria::sortByName:
+			return selectionSort(firm, [](const Employee& e1, const Employee& e2) { return myStrCmp(e1.name, e2.name) < 0; });
+		case Criteria::sortBySalary:
+			return selectionSort(firm, [](const Employee& e1, const Employee& e2) { return e1.salary < e2.salary; });
+		case Criteria::sortByRating:
+			return selectionSort(firm, [](const Employee& e1, const Employee& e2) { return e1.rating < e2.rating; });
 		}
 	}
 
@@ -97,7 +124,7 @@ namespace EmployeesNS
 	{
 		int min = INT_MAX, max = INT_MIN;
 
-		for (size_t i = 1; i < firm.employeesCount; i++)
+		for (size_t i = 0; i < firm.employeesCount; i++)
 			if ((int)firm.employees[i].position == position)
 			{
 				if (firm.employees[i].rating < min)
@@ -126,23 +153,23 @@ namespace EmployeesNS
 		cout << "Lead Software Engineer => Max: " << maxLSERating << " Min: " << minLSERating << endl;
 	}
 
-	void printLexicographicalOrder(const Firm& firm)
-	{
-		selectionSort(firm.employees, firm.employeesCount);
-
-		for (size_t i = 0; i < firm.employeesCount; i++)
-			if (firm.employees[i].salary > firm.averagePay)
-				cout << firm.employees[i].name << ' ';
-
-		cout << endl;
-	}
-
 	void printEmployee(const Employee& employee)
 	{
 		cout << "Name: " << employee.name << endl;
 		cout << "Salary: " << employee.salary << endl;
 		cout << "Rating: " << employee.rating << endl;
-		cout << "Position: " << positions[(int)employee.position] << endl;
+		cout << "Position: " << getPosition(employee.position) << endl;
+	}
+
+	void printLexicographicalOrder(Firm& firm)
+	{
+		sortByCriteria(firm, Criteria::sortByName);
+
+		for (size_t i = 0; i < firm.employeesCount; i++)
+			if (firm.employees[i].salary > firm.averagePay)
+				printEmployee(firm.employees[i]);
+
+		cout << endl;
 	}
 }
 
