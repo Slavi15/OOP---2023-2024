@@ -1,53 +1,71 @@
 #include <iostream>
 #include <fstream>
 
-void replace(std::ifstream& ifs, std::ofstream& ofs, std::ifstream& placeholderStream)
+unsigned int myStrLen(const char* str)
+{
+	if (!str) return 0;
+
+	unsigned int count = 0;
+	while (*str)
+	{
+		str++;
+		count++;
+	}
+
+	return count;
+}
+
+char* getReversed(const char* str)
+{
+	if (!str) return nullptr;
+
+	unsigned length = myStrLen(str);
+
+	char* reversed = new char[length + 1];
+	reversed[length] = '\0';
+
+	int idx = 0;
+	for (int i = length - 1; i >= 0; i--)
+		reversed[idx++] = str[i];
+
+	return reversed;
+}
+
+void reverse(std::ifstream& ifs, std::ofstream& ofs)
 {
 	char buff[1024];
 
-	while (true)
+	while (!ifs.eof())
 	{
-		char current = ifs.get();
+		ifs.getline(buff, 1024);
 
-		if (ifs.eof()) break;
+		char* reversedLine = getReversed(buff);
 
-		if (current != '{')
-			ofs << current;
-		else
-		{
-			placeholderStream.getline(buff, 1024, ' ');
-			placeholderStream.getline(buff, 1024, '\n');
+		ofs << reversedLine << std::endl;
 
-			ofs << buff;
-
-			ifs.getline(buff, 1024, '}');
-		}
+		delete[] reversedLine;
 	}
 }
 
-void replacePlaceholders(const char* src, const char* dest, const char* placeholder)
+void reverseFile(const char* fileName)
 {
-	if (!src || !dest || !placeholder)
-		return;
+	if (!fileName) return;
 
-	std::ifstream ifs(src);
-	std::ifstream placeholderStream(placeholder);
+	std::ifstream ifs(fileName);
+	if (!ifs.is_open()) return;
 
-	if (!ifs.is_open() && !placeholderStream.is_open()) return;
-
-	std::ofstream ofs(dest);
+	std::ofstream ofs("output.txt");
 	if (!ofs.is_open()) return;
 
-	replace(ifs, ofs, placeholderStream);
+	reverse(ifs, ofs);
 
 	ifs.close();
 	ofs.close();
-	placeholderStream.close();
 }
 
 int main()
 {
-	replacePlaceholders("template.txt", "result.txt", "placeholder.txt");
+	reverseFile("input.txt");
 
 	return 0;
 }
