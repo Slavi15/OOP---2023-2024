@@ -1,4 +1,0 @@
-title Veliki
-recipient_name Pop Armeniya
-message Iskam da se oplacha!!!
-sender_name FMI-student
