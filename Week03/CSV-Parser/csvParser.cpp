@@ -11,6 +11,9 @@ namespace GLOBAL_CONSTANTS
 
 namespace CSVParserNS
 {
+	//typedef char Field[GLOBAL_CONSTANTS::MAX_FIELD_LENGTH + 1];
+	//typedef Field Row[GLOBAL_CONSTANTS::MAX_FIELD_ROWS];
+
 	struct Field
 	{
 		char field[GLOBAL_CONSTANTS::MAX_FIELD_LENGTH + 1];
@@ -85,6 +88,31 @@ namespace CSVParserNS
 		return saveCSV(ofs, csv);
 	}
 
+	int getColumnIndex(const CSV& csv, const char* title)
+	{
+		if (!title) return -1;
+
+		for (size_t i = 0; i < csv.currentColumns; i++)
+			if (strcmp((char*)&csv.rows[0].field[i], title) == 0)
+				return i;
+
+		return -1;
+	}
+
+	void modify(CSV& csv, const char* title, const char* newValues, char separator)
+	{
+		if (!title || !newValues) return;
+
+		int columnIndex = getColumnIndex(csv, title);
+
+		if (columnIndex < 0 || columnIndex > csv.currentColumns) return;
+
+		std::stringstream ss(newValues);
+
+		for (size_t i = 1; i < csv.currentRows && !ss.eof(); i++)
+			ss.getline((char*)&csv.rows[i].field[columnIndex], GLOBAL_CONSTANTS::MAX_FIELD_LENGTH, separator);
+	}
+
 	void printCSV(const CSV& csv)
 	{
 		for (size_t i = 0; i < csv.currentRows; i++)
@@ -99,6 +127,10 @@ namespace CSVParserNS
 int main()
 {
 	CSVParserNS::CSV csv = CSVParserNS::readFromFile("sample.csv");
+
+	CSVParserNS::printCSV(csv);
+
+	CSVParserNS::modify(csv, "Name", "Slavi:Angel:Peter", ':');
 
 	CSVParserNS::printCSV(csv);
 
