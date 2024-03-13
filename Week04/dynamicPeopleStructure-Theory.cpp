@@ -16,6 +16,18 @@ namespace ObjectsArrayNS
 		size_t currentSize = 0;
 	};
 
+	Person initPerson(const char* name, unsigned int age)
+	{
+		Person person;
+
+		person.name = new char[strlen(name) + 1];
+		strcpy(person.name, name);
+
+		person.age = age;
+
+		return person;
+	}
+
 	void readPerson(std::ifstream& ifs, Person& person)
 	{
 		size_t nameLen = 0;
@@ -76,17 +88,48 @@ namespace ObjectsArrayNS
 
 		return writeToFile(ofs, people);
 	}
+
+	void freePeople(People& people)
+	{
+		for (size_t i = 0; i < people.currentSize; i++)
+		{
+			delete[] people.people[i].name;
+			people.people[i].name = nullptr;
+		}
+
+		delete[] people.people;
+		people.people = nullptr;
+		people.currentSize = 0;
+	}
+
+	void printPeople(const People& people)
+	{
+		for (size_t i = 0; i < people.currentSize; i++)
+			std::cout << "Name: " << people.people[i].name << ' ' << "Age: " << people.people[i].age << std::endl;
+	}
 }
 
 int main()
 {
-	ObjectsArrayNS::People people = ObjectsArrayNS::readFromFile("sample.txt");
-	ObjectsArrayNS::writeToFile("result.txt", people);
+	// Writing to File
+	{
+		ObjectsArrayNS::People people;
+		people.currentSize = 2;
+		people.people = new ObjectsArrayNS::Person[people.currentSize];
+		people.people[0] = ObjectsArrayNS::initPerson("Angel", 28);
+		people.people[1] = ObjectsArrayNS::initPerson("Ivan", 20);
 
-	for (size_t i = 0; i < people.currentSize; i++)
-		delete[] people.people->name;
+		ObjectsArrayNS::writeToFile("result.txt", people);
 
-	delete[] people.people;
+		ObjectsArrayNS::freePeople(people);
+	}
+
+	// Reading from File
+	{
+		ObjectsArrayNS::People people = ObjectsArrayNS::readFromFile("result.txt");
+		ObjectsArrayNS::printPeople(people);
+		ObjectsArrayNS::freePeople(people);
+	}
 
 	return 0;
 }
