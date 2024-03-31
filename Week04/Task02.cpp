@@ -57,6 +57,7 @@ void Problem::setProblemText(const char* problemText)
 {
 	if (!problemText) return;
 
+	delete[] this->problemText;
 	this->problemText = new char[strlen(problemText) + 1];
 	strcpy(this->problemText, problemText);
 }
