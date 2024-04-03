@@ -45,7 +45,7 @@ bool EventCollection::removeEvent(const char* title)
 
 	if (index == -1) return false;
 
-	std::swap(events[index], events[currentSize--]);
+	std::swap(events[index], events[--currentSize]);
 	return true;
 }
 
