@@ -24,6 +24,7 @@ public:
 	BitSet& operator=(const BitSet& other);
 
 	void add(size_t num);
+	void invert(size_t num);
 	void remove(size_t num);
 	const bool contains(size_t num) const;
 

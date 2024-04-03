@@ -38,6 +38,17 @@ void BitSet::add(size_t num)
 	buckets[idx] |= mask;
 }
 
+void BitSet::invert(size_t num)
+{
+	if (num > N) return;
+
+	size_t index = getBucketIndex(num);
+	num %= BYTE_LENGTH;
+	int mask = 1 << num;
+
+	buckets[index] ^= mask;
+}
+
 void BitSet::remove(size_t num)
 {
 	if (num > N) return;
