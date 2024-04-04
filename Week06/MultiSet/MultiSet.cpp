@@ -35,18 +35,18 @@ void MultiSet::add(size_t num)
 	bool value1 = checkBit(buckets[index], pos1);
 	bool value2 = checkBit(buckets[index], pos2);
 
-	size_t occurences = (2 * value1) + value2;
+	size_t occurences = value1 + (2 * value2);
 
 	if (occurences == 3) return;
 	occurences++;
 
-	value1 = occurences & 0b10;
-	value2 = occurences & 0b01;
+	value1 = occurences & 0b01;
+	value2 = occurences & 0b10;
 
-	if (((buckets[index] & (1 << pos1)) > 0) != value1)
+	if (checkBit(buckets[index], pos1) != value1)
 		buckets[index] ^= (1 << pos1);
 
-	if (((buckets[index] & (1 << pos2)) > 0) != value2)
+	if (checkBit(buckets[index], pos2) != value2)
 		buckets[index] ^= (1 << pos2);
 }
 
@@ -63,18 +63,18 @@ void MultiSet::remove(size_t num)
 	bool value1 = checkBit(buckets[index], pos1);
 	bool value2 = checkBit(buckets[index], pos2);
 
-	size_t occurences = (2 * value1) + value2;
+	size_t occurences = value1 + (2 * value2);
 
 	if (occurences == 0) return;
 	occurences--;
 
-	value1 = occurences & 0b10;
-	value2 = occurences & 0b01;
+	value1 = occurences & 0b01;
+	value2 = occurences & 0b10;
 
-	if (((buckets[index] & (1 << pos1)) > 0) != value1)
+	if (checkBit(buckets[index], pos1) != value1)
 		buckets[index] ^= (1 << pos1);
 
-	if (((buckets[index] & (1 << pos2)) > 0) != value2)
+	if (checkBit(buckets[index], pos2) != value2)
 		buckets[index] ^= (1 << pos2);
 }
 
@@ -91,7 +91,7 @@ const int MultiSet::contains(size_t num) const
 	bool value1 = checkBit(buckets[index], pos1);
 	bool value2 = checkBit(buckets[index], pos2);
 
-	size_t occurences = (2 * value1) + value2;
+	size_t occurences = value1 + (2 * value2);
 	return occurences;
 }
 
