@@ -176,8 +176,6 @@ NVector operator*(int scalar, const NVector& other)
 
 std::istream& operator>>(std::istream& is, NVector& ref)
 {
-	is >> ref.size;
-
 	for (size_t i = 0; i < ref.getSize(); i++)
 		is >> ref.data[i];
 
