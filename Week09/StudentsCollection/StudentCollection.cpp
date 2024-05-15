@@ -123,7 +123,7 @@ void StudentCollection::remove(size_t index)
 	delete this->students[index];
 	this->students[index] = nullptr;
 
-	if ((getSize() * 4) >= getCapacity() && getCapacity() >= 1)
+	if ((getSize() * 4) <= getCapacity() && getCapacity() > 1)
 		resize(getCapacity() / 2);
 }
 
