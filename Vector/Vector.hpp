@@ -45,6 +45,13 @@ public:
 
 	void remove(size_t index);
 
+	const bool isEmpty() const;
+
+	void clear();
+
+	const T& operator[](size_t index) const;
+	T& operator[](size_t index);
+
 	TT
 	friend std::istream& operator>>(std::istream& is, Vector<T>& vector);
 
@@ -174,6 +181,33 @@ void Vector<T>::remove(size_t index)
 	}
 
 	// std::swap(this->data[index], this->data[getSize()]);
+}
+
+TT
+const bool Vector<T>::isEmpty() const
+{
+	return getSize() == 0;
+}
+
+TT
+void Vector<T>::clear()
+{
+	delete[] this->data;
+
+	this->data = nullptr;
+	this->size = 0;
+}
+
+TT
+const T& Vector<T>::operator[](size_t index) const
+{
+	return this->data[index];
+}
+
+TT
+T& Vector<T>::operator[](size_t index)
+{
+	return this->data[index];
 }
 
 TT
