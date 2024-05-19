@@ -1,6 +1,6 @@
 #include "Shapes.h"
 
-Shapes::Shapes(size_t size, ShapesType type) : size(size), type(type)
+Shapes::Shapes(size_t size) : size(size)
 {
 	this->points = new Point[this->size];
 }
@@ -42,7 +42,7 @@ const size_t Shapes::getSize() const
 	return this->size;
 }
 
-void Shapes::setPoint(int x, int y, size_t index)
+void Shapes::addPoint(int x, int y, size_t index)
 {
 	if (index >= getSize()) return;
 
@@ -50,22 +50,22 @@ void Shapes::setPoint(int x, int y, size_t index)
 	this->points[index].y = y;
 }
 
-void Shapes::setPoint(const Point& p, size_t index)
+void Shapes::addPoint(const Point& p, size_t index)
 {
 	if (index >= getSize()) return;
 
-	this->points[index] = p;
+	this->points[index].x = p.x;
+	this->points[index].y = p.y;
 }
 
 double Shapes::getPerimeter() const
 {
-	assert(size >= 3);
-
 	double perimeter = 0;
-	for (size_t i = 0; i < getSize(); i++)
+
+	for (size_t i = 0; i < getSize() - 1; i++)
 		perimeter += this->points[i].getDistance(this->points[i + 1]);
 
-	return perimeter + this->points[0].getDistance(this->points[getSize() - 1]);
+	return perimeter += this->points[0].getDistance(this->points[getSize() - 1]);
 }
 
 Shapes::~Shapes() noexcept
@@ -73,17 +73,18 @@ Shapes::~Shapes() noexcept
 	free();
 }
 
-const Shapes::Point& Shapes::getPointAtIndex(size_t index) const
+const Shapes::Point& Shapes::getPointByIndex(size_t index) const
 {
+	if (index >= getSize()) return Point{};
+
 	return this->points[index];
 }
 
 void Shapes::copyFrom(const Shapes& other)
 {
 	this->size = other.size;
-	this->type = other.type;
 
-	this->points = new Point[this->size];
+	this->points = new Point[other.size];
 	for (size_t i = 0; i < this->size; i++)
 		this->points[i] = other.points[i];
 }
@@ -92,11 +93,9 @@ void Shapes::moveFrom(Shapes&& other) noexcept
 {
 	this->points = other.points;
 	this->size = other.size;
-	this->type = other.type;
 
 	other.points = nullptr;
 	other.size = 0;
-	other.type = ShapesType::NONE;
 }
 
 void Shapes::free()
@@ -105,5 +104,4 @@ void Shapes::free()
 
 	this->points = nullptr;
 	this->size = 0;
-	this->type = ShapesType::NONE;
 }

@@ -1,17 +1,17 @@
 #include "Triangle.h"
 
-Triangle::Triangle(int x1, int y1, int x2, int y2, int x3, int y3) : Shapes(3, ShapesType::TRIANGLE)
+Triangle::Triangle(int x1, int y1, int x2, int y2, int x3, int y3) : Shapes(3)
 {
-	setPoint(x1, y1, 0);
-	setPoint(x2, y2, 1);
-	setPoint(x3, y3, 2);
+	addPoint(x1, y1, 0);
+	addPoint(x2, y2, 1);
+	addPoint(x3, y3, 2);
 }
 
-Triangle::Triangle(const Point& p1, const Point& p2, const Point& p3) : Shapes(3, ShapesType::TRIANGLE)
+Triangle::Triangle(const Point& p1, const Point& p2, const Point& p3) : Shapes(3)
 {
-	setPoint(p1, 0);
-	setPoint(p2, 1);
-	setPoint(p3, 2);
+	addPoint(p1, 0);
+	addPoint(p2, 1);
+	addPoint(p3, 2);
 }
 
 double Triangle::getArea() const
@@ -27,9 +27,9 @@ double Triangle::getArea() const
 	// Hero's Formula
 
 	// Determinant
-	const Shapes::Point& p1 = getPointAtIndex(0);
-	const Shapes::Point& p2 = getPointAtIndex(1);
-	const Shapes::Point& p3 = getPointAtIndex(2);
+	const Point& p1 = getPointByIndex(0);
+	const Point& p2 = getPointByIndex(1);
+	const Point& p3 = getPointByIndex(2);
 
 	return abs(p1.x * p2.y + p2.x * p3.y + p3.x * p1.y - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x) / 2;
 	// Determinant
@@ -37,16 +37,39 @@ double Triangle::getArea() const
 
 bool Triangle::isPointInside(int x, int y) const
 {
-	Shapes::Point p(x, y);
+	Point p(x, y);
 
-	Triangle t1(getPointAtIndex(0), getPointAtIndex(1), p);
-	Triangle t2(getPointAtIndex(0), getPointAtIndex(2), p);
-	Triangle t3(getPointAtIndex(1), getPointAtIndex(2), p);
+	Triangle t1(getPointByIndex(0), getPointByIndex(1), p);
+	Triangle t2(getPointByIndex(0), getPointByIndex(2), p);
+	Triangle t3(getPointByIndex(1), getPointByIndex(2), p);
 
-	return abs(t1.getArea() + t2.getArea() + t3.getArea() - getArea()) <= std::numeric_limits<double>::epsilon(); // 0.0001
+	return (t1.getArea() + t2.getArea() + t3.getArea() - getArea()) <= std::numeric_limits<double>::epsilon();
 }
 
 Shapes* Triangle::clone() const
 {
 	return new Triangle(*this);
+}
+
+bool Triangle::intersectedWith(Shapes* other)
+{
+	return other->intersectedWithTriangle(this);
+}
+
+bool Triangle::intersectedWithTriangle(Triangle* other)
+{
+	std::cout << "Triangle + Triangle" << std::endl;
+	return true;
+}
+
+bool Triangle::intersectedWithRectangle(Rectangle* other)
+{
+	std::cout << "Triangle + Rectangle" << std::endl;
+	return true;
+}
+
+bool Triangle::intersectedWithCircle(Circle* other)
+{
+	std::cout << "Triangle + Circle" << std::endl;
+	return true;
 }

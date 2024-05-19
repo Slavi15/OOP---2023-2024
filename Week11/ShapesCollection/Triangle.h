@@ -12,4 +12,10 @@ public:
 	bool isPointInside(int x, int y) const override;
 
 	Shapes* clone() const override;
+
+	bool intersectedWith(Shapes* other) override;
+
+	bool intersectedWithTriangle(Triangle* other) override;
+	bool intersectedWithRectangle(Rectangle* other) override;
+	bool intersectedWithCircle(Circle* other) override;
 };

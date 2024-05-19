@@ -1,7 +1,6 @@
 #pragma once
 
 #define _USE_MATH_DEFINES
-
 #include <cmath>
 
 #include "Shapes.h"
@@ -17,9 +16,17 @@ public:
 
 	const double getRadius() const;
 
+	void setRadius(double radius);
+
 	double getArea() const override;
 	double getPerimeter() const override;
 	bool isPointInside(int x, int y) const override;
 
 	Shapes* clone() const override;
+
+	bool intersectedWith(Shapes* other) override;
+
+	bool intersectedWithCircle(Circle* other) override;
+	bool intersectedWithTriangle(Triangle* other) override;
+	bool intersectedWithRectangle(Rectangle* other) override;
 };

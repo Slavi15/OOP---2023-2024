@@ -1,9 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <cassert>
 
-enum class ShapesType { NONE, TRIANGLE, RECTANGLE, CIRCLE };
+class Triangle;
+class Rectangle;
+class Circle;
 
 class Shapes
 {
@@ -25,19 +26,18 @@ protected:
 		}
 	};
 
-	const Point& getPointAtIndex(size_t index) const;
+	const Point& getPointByIndex(size_t index) const;
 
 private:
 	Point* points = nullptr;
 	size_t size = 0;
-	ShapesType type = ShapesType::NONE;
 
 	void copyFrom(const Shapes& other);
 	void moveFrom(Shapes&& other) noexcept;
 	void free();
 
 public:
-	Shapes(size_t size, ShapesType type);
+	Shapes(size_t size);
 
 	Shapes(const Shapes& other);
 	Shapes& operator=(const Shapes& other);
@@ -47,16 +47,20 @@ public:
 
 	const size_t getSize() const;
 
-	void setPoint(int x, int y, size_t index);
-	void setPoint(const Point& p, size_t index);
+	void addPoint(int x, int y, size_t index);
+	void addPoint(const Point& p, size_t index);
 
 	virtual double getArea() const = 0;
-
-	virtual double getPerimeter() const; // non-pure virtual function because the calculation of the perimeter for every is almost the same
-
+	virtual double getPerimeter() const;
 	virtual bool isPointInside(int x, int y) const = 0;
 
 	virtual Shapes* clone() const = 0;
+
+	virtual bool intersectedWith(Shapes* other) = 0;
+
+	virtual bool intersectedWithTriangle(Triangle* other) = 0;
+	virtual bool intersectedWithRectangle(Rectangle* other) = 0;
+	virtual bool intersectedWithCircle(Circle* other) = 0;
 
 	virtual ~Shapes() noexcept;
 };
