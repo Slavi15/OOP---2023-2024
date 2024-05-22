@@ -34,5 +34,10 @@ public:
 	void addMonster(Monster* monster);
 	void addMonster(const Monster& monster);
 
+	const Monster& operator[](size_t index) const;
+	Monster& operator[](size_t index);
+
+	const size_t countWins(Monster* monster) const;
+
 	~MonsterContainer() noexcept;
 };

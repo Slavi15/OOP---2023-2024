@@ -7,7 +7,8 @@ bool Centaur::beatsMonster(Monster* monster)
 
 bool Centaur::beatsCentaur(Centaur* monster)
 {
-	throw drinking_beer("Drinking Beer!");
+	//throw drinking_beer("Drinking Beer!");
+	return false;
 }
 
 bool Centaur::beatsMinotaur(Minotaur* monster)

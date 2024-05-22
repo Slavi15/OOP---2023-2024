@@ -7,7 +7,8 @@ bool Sphynx::beatsMonster(Monster* monster)
 
 bool Sphynx::beatsSphynx(Sphynx* monster)
 {
-	throw drinking_beer("Drinking Beer!");
+	//throw drinking_beer("Drinking Beer!");
+	return false;
 }
 
 bool Sphynx::beatsMinotaur(Minotaur* monster)

@@ -67,6 +67,27 @@ void MonsterContainer::addMonster(const Monster& monster)
 	this->container[this->size++] = monster.clone();
 }
 
+const Monster& MonsterContainer::operator[](size_t index) const
+{
+	return *this->container[index];
+}
+
+Monster& MonsterContainer::operator[](size_t index)
+{
+	return *this->container[index];
+}
+
+const size_t MonsterContainer::countWins(Monster* monster) const
+{
+	size_t result = 0;
+
+	for (size_t i = 0; i < getSize(); i++)
+		if (monster->beatsMonster(this->container[i]))
+			result++;
+
+	return result;
+}
+
 MonsterContainer::~MonsterContainer() noexcept
 {
 	free();
