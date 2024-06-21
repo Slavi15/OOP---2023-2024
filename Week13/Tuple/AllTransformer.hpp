@@ -92,7 +92,7 @@ Tuple<T, N>& AllTransformer<T, N>::transform(Tuple<T, N>& tuple) const
 {
 	for (size_t i = 0; i < getSize(); i++)
 	{
-		if (i >= tuple.getSize())
+		if (i >= tuple.getSize()) // the same as i >= N
 			return tuple;
 
 		tuple[i] = this->data[i];

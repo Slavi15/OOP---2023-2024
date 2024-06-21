@@ -3,6 +3,8 @@
 #include "AllTransformer.hpp"
 #include "ChangeAt.hpp"
 
+enum TransformerType { ALL, CHANGE_AT };
+
 template<typename T, size_t N>
 Transformer<T, N>* transformerFactory(TransformerType type)
 {

@@ -18,7 +18,7 @@ public:
 TT
 const size_t Tuple<T, N>::getSize() const
 {
-	return N;
+	return N; // Not needed as getter function, because the length is given in template
 }
 
 TT
