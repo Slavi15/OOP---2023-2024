@@ -2,7 +2,7 @@
 
 String::String() : String("") {}
 
-String::String(size_t newSize) : size(newSize)
+String::String(size_t newSize) : size(0)
 {
 	this->capacity = allocateCapacity(newSize);
 	this->data = new char[this->capacity] { '\0' };
@@ -113,7 +113,10 @@ String String::substr(size_t begin, size_t howMany) const
 String operator+(const String& lhs, const String& rhs)
 {
 	String toReturn(lhs.getSize() + rhs.getSize());
+
+	toReturn += lhs;
 	toReturn += rhs;
+	
 	return toReturn;
 }
 
