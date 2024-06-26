@@ -2,6 +2,8 @@
 
 bool ExpressionHandler::checkAllTruthAssignments(bool value) const
 {
+	expr->populateVariables(myVariables);
+	
 	size_t varsCount = myVariables.getTrueCount();
 	size_t powerTwo = (1 << varsCount);
 
