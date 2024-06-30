@@ -2,8 +2,6 @@
 
 bool ExpressionHandler::checkAllTruthAssignments(bool value) const
 {
-	expr->populateVariables(myVariables);
-	
 	size_t varsCount = myVariables.getTrueCount();
 	size_t powerTwo = (1 << varsCount);
 
@@ -13,6 +11,30 @@ bool ExpressionHandler::checkAllTruthAssignments(bool value) const
 		current.excludeValuesByMask(i);
 
 		if (expr->eval(current) != value)
+			return false;
+	}
+
+	return true;
+}
+
+bool operator==(const ExpressionHandler& lhs, const ExpressionHandler& rhs)
+{
+	size_t lhsCount = lhs.myVariables.getTrueCount();
+	size_t rhsCount = rhs.myVariables.getTrueCount();
+
+	if (lhsCount != rhsCount) return false;
+
+	size_t powerTwo = (1 << lhsCount);
+
+	for (size_t i = 0; i < powerTwo; i++)
+	{
+		BooleanInterPretation lhsCurrent = lhs.myVariables;
+		BooleanInterPretation rhsCurrent = rhs.myVariables;
+
+		lhsCurrent.excludeValuesByMask(i);
+		rhsCurrent.excludeValuesByMask(i);
+
+		if (lhs.expr->eval(lhsCurrent) != rhs.expr->eval(rhsCurrent))
 			return false;
 	}
 

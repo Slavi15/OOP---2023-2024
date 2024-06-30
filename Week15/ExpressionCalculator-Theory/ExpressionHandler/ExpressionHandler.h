@@ -33,5 +33,7 @@ public:
 	bool isTautology() const;
 	bool isContradiction() const;
 
+	friend bool operator==(const ExpressionHandler& lhs, const ExpressionHandler& rhs);
+
 	~ExpressionHandler() noexcept;
 };
