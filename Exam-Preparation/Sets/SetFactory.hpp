@@ -8,7 +8,7 @@
 
 #include "FiniteSet.hpp"
 #include "IntervalSet.hpp"
-#include "SetByCriteria.hpp" // it wraps one of the criterias down below
+#include "SetByCriteria.hpp" // it wraps one of the criterias down below (concat and substring)
 #include "SubstringCriteria.hpp"
 #include "ConcatCriteria.hpp"
 #include "UnionSet.hpp"
@@ -27,43 +27,43 @@ private:
 	Set<T>* readUnionSet(std::ifstream& ifs, uint32_t elementCount);
 	Set<T>* readIntersectionSet(std::ifstream& ifs, uint32_t elementCount);
 
-	Set<T>* readSet(std::ifstream& ifs, uint32_t elementCount, uint8_t addType);
-
 public:
-	Set<T>* readFromFile(const char* fileName);
+	Set<T>* readSet(std::ifstream& ifs, uint32_t elementCount, uint8_t setType);
+
+	//Set<T>* readFromFile(const char* fileName);
 };
 
+//TT
+//Set<T>* readFromFile(const char* fileName)
+//{
+//	if (!fileName) return nullptr;
+//
+//	std::ifstream ifs(fileName, std::ios::in | std::ios::binary);
+//
+//	if (!ifs.is_open()) return nullptr;
+//
+//	uint32_t elemCount = 0;
+//	uint8_t addType = 0;
+//
+//	ifs.read(reinterpret_cast<char*>(&elemCount), sizeof(uint32_t));
+//	ifs.read(reinterpret_cast<char*>(&addType), sizeof(uint8_t));
+//
+//	uint8_t setType  = (addType >> 5); // according to the task, this is how we obtain setType
+//
+//	return readSet(ifs, elemCount, setType);
+//}
+
 TT
-Set<T>* readFromFile(const char* fileName)
+Set<T>* readSet(std::ifstream& ifs, uint32_t elementCount, uint8_t setType)
 {
-	if (!fileName) return nullptr;
-
-	std::ifstream ifs(fileName, std::ios::in | std::ios::binary);
-
-	if (!ifs.is_open()) return nullptr;
-
-	uint32_t elemCount = 0;
-	uint8_t addType = 0;
-
-	ifs.read(reinterpret_cast<char*>(&elemCount), sizeof(uint32_t));
-	ifs.read(reinterpret_cast<char*>(&addType), sizeof(uint8_t));
-
-	uint8_t setType  = (addType >> 5); // according to the task, this is how we obtain setType
-
-	return readSet(ifs, elemCount, setType);
-}
-
-TT
-Set<T>* readSet(std::ifstream& ifs, uint32_t elementCount, uint8_t addType)
-{
-	switch (addType)
+	switch (setType)
 	{
-	case 0: return readFiniteSet(ifs, addType);
-	case 1: return readIntervalSet(ifs, addType);
-	case 2: return readSubstringSet(ifs, addType);
-	case 3: return readConcatSet(ifs, addType);
-	case 4: return readUnionSet(ifs, addType);
-	case 5: return readIntersectionSet(ifs, addType);
+	case 0: return readFiniteSet(ifs, setType);
+	case 1: return readIntervalSet(ifs, setType);
+	case 2: return readSubstringSet(ifs, setType);
+	case 3: return readConcatSet(ifs, setType);
+	case 4: return readUnionSet(ifs, setType);
+	case 5: return readIntersectionSet(ifs, setType);
 	}
 }
 
