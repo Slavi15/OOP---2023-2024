@@ -58,12 +58,12 @@ Set<T>* readSet(std::ifstream& ifs, uint32_t elementCount, uint8_t setType)
 {
 	switch (setType)
 	{
-	case 0: return readFiniteSet(ifs, setType);
-	case 1: return readIntervalSet(ifs, setType);
-	case 2: return readSubstringSet(ifs, setType);
-	case 3: return readConcatSet(ifs, setType);
-	case 4: return readUnionSet(ifs, setType);
-	case 5: return readIntersectionSet(ifs, setType);
+	case 0: return readFiniteSet(ifs, elementCount);
+	case 1: return readIntervalSet(ifs, elementCount);
+	case 2: return readSubstringSet(ifs, elementCount);
+	case 3: return readConcatSet(ifs, elementCount);
+	case 4: return readUnionSet(ifs, elementCount);
+	case 5: return readIntersectionSet(ifs, elementCount);
 	}
 }
 
