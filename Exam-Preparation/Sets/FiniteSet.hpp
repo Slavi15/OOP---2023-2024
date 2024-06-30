@@ -26,7 +26,7 @@ bool FiniteSet<T>::operator[](const T& element) const
 {
 	for (size_t i = 0; i < data.getSize(); i++)
 	{
-		if (data[i] == elements[i])
+		if (data[i] == element)
 		{
 			return true;
 		}
