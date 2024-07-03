@@ -44,6 +44,7 @@ bool operator==(const ExpressionHandler& lhs, const ExpressionHandler& rhs)
 ExpressionHandler::ExpressionHandler(const String& str)
 {
 	expr = ExpressionFactory::expressionFactory(str);
+	expr->populateVariables(myVariables);
 }
 
 ExpressionHandler::ExpressionHandler(const ExpressionHandler& other)
